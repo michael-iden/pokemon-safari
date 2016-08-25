@@ -10,18 +10,26 @@
     tools:context="com.magnetic.pokemonsafari.HomeActivity"
     android:background="@color/background_material_dark">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/pokemon" />
+
     <ImageButton
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:id="@+id/imageButton"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:background="#00abd6"
         android:src="@drawable/gyarados"
         android:scaleType="fitCenter"
         android:paddingBottom="40dp"
         android:paddingTop="10dp"
-        android:layout_marginTop="20dp" />
+        android:layout_above="@+id/imageButton2"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="55dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -38,15 +46,14 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:id="@+id/imageButton2"
-        android:layout_below="@+id/imageButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp"
         android:background="#ee0000"
         android:src="@drawable/white_pokeball"
         android:scaleType="fitCenter"
         android:paddingBottom="40dp"
         android:paddingTop="10dp"
-        android:onClick="openPokeDex"/>
+        android:onClick="openPokeDex"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignParentEnd="true" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
