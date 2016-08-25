@@ -11,6 +11,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -93,9 +95,11 @@ public class PokemonDatabaseHelper extends SQLiteOpenHelper {
         myInput.close();
     }
 
-    public void getAllPokemon() {
+    public List<Pokemon> getAllPokemon() {
         SQLiteDatabase pokemonDatabase = this.getReadableDatabase();
         Cursor pokemonDatabaseCursor = pokemonDatabase.rawQuery("SELECT * FROM POKEMON", null);
+
+        List<Pokemon> pokemonList = new ArrayList<>(151);
         while(pokemonDatabaseCursor.moveToNext()) {
 
             String number = pokemonDatabaseCursor.getString(0);
@@ -103,9 +107,10 @@ public class PokemonDatabaseHelper extends SQLiteOpenHelper {
             String imageFile = pokemonDatabaseCursor.getString(2);
             String cryFile = pokemonDatabaseCursor.getString(3);
 
-            Pokemon pokemon = new Pokemon(number, name, imageFile, cryFile);
-            Log.e("TEST_LOADER", pokemon.getName());
+            pokemonList.add(new Pokemon(number, name, imageFile, cryFile));
         }
+
+        return pokemonList;
     }
 
     @Override
