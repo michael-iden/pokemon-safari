@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/home/joey.bickerstaff/source/PokemonSafari/dJISDKLIB/src/main/assets"/><source path="/home/joey.bickerstaff/source/PokemonSafari/dJISDKLIB/build/generated/assets/shaders/release"/></dataSet><dataSet config="release"><source path="/home/joey.bickerstaff/source/PokemonSafari/dJISDKLIB/src/release/assets"/></dataSet></merger>

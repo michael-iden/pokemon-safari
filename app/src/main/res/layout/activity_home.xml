@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.magnetic.pokemonsafari.HomeActivity"
+    android:background="@color/background_material_dark"
+    android:theme="@style/AppTheme.AppBarOverlay">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:src="@drawable/pokemon"
+        android:id="@+id/imageView" />
+
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        android:id="@+id/imageButton"
+        android:background="#00abd6"
+        android:src="@drawable/gyarados"
+        android:scaleType="fitCenter"
+        android:paddingBottom="40dp"
+        android:paddingTop="10dp"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="43dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Safari"
+        android:id="@+id/textView3"
+        android:layout_alignBottom="@+id/imageButton"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:textColor="#ffffff" />
+
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        android:id="@+id/imageButton2"
+        android:layout_below="@+id/imageButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:background="#ee0000"
+        android:src="@drawable/white_pokeball"
+        android:scaleType="fitCenter"
+        android:paddingBottom="40dp"
+        android:paddingTop="10dp"
+        android:onClick="openPokeDex"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="PokeDex"
+        android:id="@+id/textView4"
+        android:layout_alignBottom="@+id/imageButton2"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:textColor="#ffffff"
+        />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/safari_logo"
+        android:id="@+id/imageView2"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>
