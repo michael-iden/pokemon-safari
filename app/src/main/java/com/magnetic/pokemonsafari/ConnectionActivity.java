@@ -140,11 +140,11 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
         switch (v.getId()) {
 
             case R.id.btn_open: {
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, FlightActivity.class);
                 startActivity(intent);
                 break;
             } case R.id.btn_simulate: {
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, FlightActivity.class);
                 intent.putExtra("simulation", true);
                 startActivity(intent);
                 break;

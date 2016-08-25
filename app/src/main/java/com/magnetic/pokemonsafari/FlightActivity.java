@@ -13,7 +13,6 @@ import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.TextureView;
@@ -21,7 +20,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.TextureView.SurfaceTextureListener;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import dji.sdk.Camera.DJICamera;
@@ -29,7 +27,6 @@ import dji.sdk.Camera.DJICamera.CameraReceivedVideoDataCallback;
 import dji.sdk.Codec.DJICodecManager;
 import dji.sdk.FlightController.DJIFlightController;
 import dji.sdk.FlightController.DJISimulator;
-import dji.sdk.Products.DJIAircraft;
 import dji.sdk.base.DJIBaseComponent.DJICompletionCallback;
 import dji.sdk.base.DJIBaseProduct;
 import dji.sdk.base.DJIBaseProduct.Model;
@@ -37,9 +34,9 @@ import dji.sdk.base.DJIError;
 import dji.sdk.Camera.DJICameraSettingsDef.CameraMode;
 import dji.sdk.Camera.DJICameraSettingsDef.CameraShootPhotoMode;
 
-public class MainActivity extends Activity implements SurfaceTextureListener, OnClickListener {
+public class FlightActivity extends Activity implements SurfaceTextureListener, OnClickListener {
 
-    private static final String TAG = MainActivity.class.getName();
+    private static final String TAG = FlightActivity.class.getName();
     protected DJICamera.CameraReceivedVideoDataCallback mReceivedVideoDataCallBack = null;
 
     // Codec for video live view
@@ -55,7 +52,7 @@ public class MainActivity extends Activity implements SurfaceTextureListener, On
     Bitmap reticleBitmap;
     String simulatorOutput = "";
 
-    public MainActivity() {
+    public FlightActivity() {
     }
 
     @Override
@@ -253,7 +250,7 @@ public class MainActivity extends Activity implements SurfaceTextureListener, On
     public void showToast(final String msg) {
         runOnUiThread(new Runnable() {
             public void run() {
-                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                Toast.makeText(FlightActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
         });
     }

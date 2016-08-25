@@ -63,7 +63,7 @@
             android:name=".ConnectionActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
+            android:name=".FlightActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name=".HomeActivity"
