@@ -10,15 +10,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.magnetic.pokemonsafari.PokeDetailsActivity"
-    tools:showIn="@layout/activity_poke_details">
+    tools:showIn="@layout/activity_poke_details"
+    android:background="@color/background_material_dark">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Details"
+        android:textColor="@color/colorWhite"
         android:id="@+id/textView5"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="39dp" />
+        android:layout_marginTop="39dp"
+        android:textSize="32dp" />
 </RelativeLayout>
