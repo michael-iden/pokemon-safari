@@ -1,9 +1,19 @@
 package com.magnetic.pokemonsafari;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,7 +40,12 @@ public class MainActivity extends Activity implements SurfaceTextureListener, On
     protected DJICodecManager codecManager = null;
 
     protected TextureView videoSurface = null;
+    protected SurfaceView overlaySurface = null;
+    protected SurfaceHolder overlayHolder = null;
+
     private Button captureButton;
+
+    Bitmap reticleBitmap;
 
     public MainActivity() {
     }
@@ -104,10 +119,34 @@ public class MainActivity extends Activity implements SurfaceTextureListener, On
     private void initUI() {
         // init videoSurface
         videoSurface = (TextureView) findViewById(R.id.video_previewer_surface);
+        overlaySurface = (SurfaceView)findViewById(R.id.overlay_surface);
         captureButton = (Button) findViewById(R.id.btn_capture);
 
         if (null != videoSurface) {
             videoSurface.setSurfaceTextureListener(this);
+        }
+
+        if (null != overlaySurface) {
+            overlaySurface.setZOrderOnTop(true);
+            overlaySurface.getHolder().setFormat(PixelFormat.TRANSPARENT);
+            overlaySurface.getHolder().addCallback(new SurfaceHolder.Callback() {
+                                                       @Override
+                                                       public void surfaceCreated(SurfaceHolder surfaceHolder) {
+                                                           overlayHolder = surfaceHolder;
+                                                           redrawOverlay();
+                                                       }
+
+                                                       @Override
+                                                       public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+
+                                                       }
+
+                                                       @Override
+                                                       public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+                                                            overlayHolder = null;
+                                                       }
+                                                   }
+            );
         }
 
         captureButton.setOnClickListener(this);
@@ -116,13 +155,14 @@ public class MainActivity extends Activity implements SurfaceTextureListener, On
     private void initPreviewer() {
 
         DJIBaseProduct product = PokemonSafariApplication.getProductInstance();
-
+        reticleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.reticle);
         if (product == null || !product.isConnected()) {
             showToast(getString(R.string.disconnected));
         } else {
             if (null != videoSurface) {
                 videoSurface.setSurfaceTextureListener(this);
             }
+
             if (!product.getModel().equals(Model.UnknownAircraft)) {
                 DJICamera camera = product.getCamera();
                 if (camera != null) {
@@ -134,6 +174,11 @@ public class MainActivity extends Activity implements SurfaceTextureListener, On
     }
 
     private void uninitPreviewer() {
+        if (reticleBitmap != null) {
+            reticleBitmap.recycle();
+            reticleBitmap = null;
+        }
+
         DJICamera camera = PokemonSafariApplication.getCameraInstance();
         if (camera != null) {
             // Reset the callback
@@ -213,5 +258,17 @@ public class MainActivity extends Activity implements SurfaceTextureListener, On
 
             }); // Execute the startShootPhoto API
         }
+    }
+
+    private void redrawOverlay() {
+        Canvas canvas = overlayHolder.lockCanvas();
+        Rect src = new Rect(0, 0, reticleBitmap.getWidth(), reticleBitmap.getHeight());
+        float desiredWidth = 100;
+        float desiredHeight = 100;
+        float left = (canvas.getWidth() - desiredWidth) / 2.0f;
+        float top = (canvas.getHeight() - desiredHeight) / 2.0f;
+        RectF dst = new RectF(left, top, left + desiredWidth, top + desiredHeight);
+        canvas.drawBitmap(reticleBitmap, src, dst, new Paint());
+        overlayHolder.unlockCanvasAndPost(canvas);
     }
 }
