@@ -1,4 +1,4 @@
-package com.magnetic.pokemonsafari;
+package com.magnetic.pokemonsafari.model;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

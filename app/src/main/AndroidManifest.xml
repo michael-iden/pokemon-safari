@@ -60,13 +60,13 @@
         <!-- DJI SDK -->
 
         <activity
-            android:name=".ConnectionActivity"
+            android:name=".activity.ConnectionActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".FlightActivity"
+            android:name=".activity.FlightActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".activity.HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -76,11 +76,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PokeDexActivity"
+            android:name=".activity.PokeDexActivity"
             android:label="@string/title_activity_poke_dex"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".PokeDetailsActivity"
+            android:name=".activity.PokeDetailsActivity"
             android:label="@string/title_activity_poke_details"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

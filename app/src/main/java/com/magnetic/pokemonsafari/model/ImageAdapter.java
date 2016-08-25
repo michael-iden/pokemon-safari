@@ -1,15 +1,17 @@
-package com.magnetic.pokemonsafari;
+package com.magnetic.pokemonsafari.model;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.magnetic.pokemonsafari.model.Pokemon;
+import com.magnetic.pokemonsafari.model.PokemonDatabaseHelper;
+import com.magnetic.pokemonsafari.R;
 
 import java.io.IOException;
 import java.io.InputStream;
