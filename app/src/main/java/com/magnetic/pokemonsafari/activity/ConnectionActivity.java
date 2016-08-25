@@ -1,4 +1,4 @@
-package com.magnetic.pokemonsafari;
+package com.magnetic.pokemonsafari.activity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -13,6 +13,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.magnetic.pokemonsafari.PokemonSafariApplication;
+import com.magnetic.pokemonsafari.R;
 
 import dji.sdk.Products.DJIAircraft;
 import dji.sdk.base.DJIBaseProduct;

@@ -1,4 +1,4 @@
-package com.magnetic.pokemonsafari;
+package com.magnetic.pokemonsafari.activity;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -21,6 +21,9 @@ import android.view.View.OnClickListener;
 import android.view.TextureView.SurfaceTextureListener;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.magnetic.pokemonsafari.PokemonSafariApplication;
+import com.magnetic.pokemonsafari.R;
 
 import dji.sdk.Camera.DJICamera;
 import dji.sdk.Camera.DJICamera.CameraReceivedVideoDataCallback;
