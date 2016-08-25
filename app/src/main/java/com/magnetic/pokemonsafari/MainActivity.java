@@ -7,11 +7,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.TextureView;
@@ -19,11 +21,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.TextureView.SurfaceTextureListener;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import dji.sdk.Camera.DJICamera;
 import dji.sdk.Camera.DJICamera.CameraReceivedVideoDataCallback;
 import dji.sdk.Codec.DJICodecManager;
+import dji.sdk.FlightController.DJIFlightController;
+import dji.sdk.FlightController.DJISimulator;
+import dji.sdk.Products.DJIAircraft;
 import dji.sdk.base.DJIBaseComponent.DJICompletionCallback;
 import dji.sdk.base.DJIBaseProduct;
 import dji.sdk.base.DJIBaseProduct.Model;
@@ -37,6 +43,7 @@ public class MainActivity extends Activity implements SurfaceTextureListener, On
     protected DJICamera.CameraReceivedVideoDataCallback mReceivedVideoDataCallBack = null;
 
     // Codec for video live view
+    protected boolean simulation = false;
     protected DJICodecManager codecManager = null;
 
     protected TextureView videoSurface = null;
@@ -46,6 +53,7 @@ public class MainActivity extends Activity implements SurfaceTextureListener, On
     private Button captureButton;
 
     Bitmap reticleBitmap;
+    String simulatorOutput = "";
 
     public MainActivity() {
     }
@@ -56,6 +64,10 @@ public class MainActivity extends Activity implements SurfaceTextureListener, On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        PokemonSafariApplication.getFlightController().setVirtualStickAdvancedModeEnabled(true);
+
+        simulation = getIntent().getBooleanExtra("simulation", false);
+        Log.i(TAG, String.format("SIMULATION MODE?  %b", simulation));
         initUI();
 
         // The callback for receiving the raw H264 video data for camera live view
@@ -192,6 +204,26 @@ public class MainActivity extends Activity implements SurfaceTextureListener, On
         if (codecManager == null) {
             codecManager = new DJICodecManager(this, surface, width, height);
         }
+
+        if (simulation) {
+            DJISimulator simulator = PokemonSafariApplication.getSimulator();
+            DJISimulator.DJISimulatorInitializationData initializationData = new DJISimulator.DJISimulatorInitializationData(0.0, 0.0, 10, 10);
+            simulator.setUpdatedSimulatorStateDataCallback(djiSimulatorStateData -> {
+                Log.i(TAG, "SIMULATION FRAME!!!!");
+                String yaw = String.format("%.2f", djiSimulatorStateData.getYaw());
+                String pitch = String.format("%.2f", djiSimulatorStateData.getPitch());
+                String roll = String.format("%.2f", djiSimulatorStateData.getRoll());
+                String positionX = String.format("%.2f", djiSimulatorStateData.getPositionX());
+                String positionY = String.format("%.2f", djiSimulatorStateData.getPositionY());
+                String positionZ = String.format("%.2f", djiSimulatorStateData.getPositionZ());
+                simulatorOutput = "Yaw : " + yaw + ", Pitch : " + pitch + ", Roll : " + roll + "\n" + "PosX : " + positionX +
+                        ", PosY : " + positionY +
+                        ", PosZ : " + positionZ;
+                redrawOverlay();
+
+            });
+            simulator.startSimulator(initializationData, error -> { Log.i(TAG, "SIMULATOR FAILED: " + error); });
+        }
     }
 
     @Override
@@ -205,6 +237,10 @@ public class MainActivity extends Activity implements SurfaceTextureListener, On
         if (codecManager != null) {
             codecManager.cleanSurface();
             codecManager = null;
+        }
+
+        if (simulation) {
+            PokemonSafariApplication.getSimulator().stopSimulator(null);
         }
 
         return false;
@@ -261,14 +297,45 @@ public class MainActivity extends Activity implements SurfaceTextureListener, On
     }
 
     private void redrawOverlay() {
+        if (overlayHolder == null) {
+            return;
+        }
+
         Canvas canvas = overlayHolder.lockCanvas();
-        Rect src = new Rect(0, 0, reticleBitmap.getWidth(), reticleBitmap.getHeight());
-        float desiredWidth = 100;
-        float desiredHeight = 100;
-        float left = (canvas.getWidth() - desiredWidth) / 2.0f;
-        float top = (canvas.getHeight() - desiredHeight) / 2.0f;
-        RectF dst = new RectF(left, top, left + desiredWidth, top + desiredHeight);
-        canvas.drawBitmap(reticleBitmap, src, dst, new Paint());
+        canvas.drawColor(Color.BLACK, PorterDuff.Mode.CLEAR);
+
+        DJIFlightController fc = PokemonSafariApplication.getFlightController();
+        String rotor = String.format("Motors On: %b", fc.getCurrentState().areMotorsOn());
+        String isInTheAir = "On the ground";
+        if (fc.getCurrentState().isFlying()) {
+            isInTheAir = "Flying";
+        } else if (fc.canTakeOff()) {
+            isInTheAir = "Ready for takeoff";
+        }
+
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(100.0f);
+        canvas.drawText(rotor + ",   " + isInTheAir, 100.0f, 100.0f, paint);
+
+        if (reticleBitmap != null) {
+            Rect src = new Rect(0, 0, reticleBitmap.getWidth(), reticleBitmap.getHeight());
+            float desiredWidth = 100;
+            float desiredHeight = 100;
+            float left = (canvas.getWidth() - desiredWidth) / 2.0f;
+            float top = (canvas.getHeight() - desiredHeight) / 2.0f;
+            RectF dst = new RectF(left, top, left + desiredWidth, top + desiredHeight);
+            canvas.drawBitmap(reticleBitmap, src, dst, new Paint());
+        }
+
+        if (simulation) {
+            String[] lines = simulatorOutput.split("\n");
+            int i = 0;
+            for (String line : lines) {
+                canvas.drawText(line, 100.0f, 200.0f + (100 * i), paint);
+                i++;
+            }
+        }
         overlayHolder.unlockCanvasAndPost(canvas);
     }
 }

@@ -8,6 +8,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import dji.sdk.Camera.DJICamera;
+import dji.sdk.FlightController.DJIFlightController;
+import dji.sdk.FlightController.DJISimulator;
 import dji.sdk.Products.DJIAircraft;
 import dji.sdk.Products.DJIHandHeld;
 import dji.sdk.SDKManager.DJISDKManager;
@@ -23,7 +25,8 @@ public class PokemonSafariApplication extends Application {
 
     public static final String FLAG_CONNECTION_CHANGE = "fpv_tutorial_connection_change";
 
-    private static DJIBaseProduct djiBaseProduct;
+    private static DJIBaseProduct baseProduct;
+    private static DJIFlightController flightController;
 
     private Handler mainLooper;
 
@@ -32,10 +35,10 @@ public class PokemonSafariApplication extends Application {
      * If no product is connected, it returns null.
      */
     public static synchronized DJIBaseProduct getProductInstance() {
-        if (null == djiBaseProduct) {
-            djiBaseProduct = DJISDKManager.getInstance().getDJIProduct();
+        if (null == baseProduct) {
+            baseProduct = DJISDKManager.getInstance().getDJIProduct();
         }
-        return djiBaseProduct;
+        return baseProduct;
     }
 
     public static boolean isAircraftConnected() {
@@ -53,6 +56,20 @@ public class PokemonSafariApplication extends Application {
 
     }
 
+    public static synchronized DJIFlightController getFlightController() {
+        if (isAircraftConnected()) {
+            DJIAircraft aircraft = (DJIAircraft)getProductInstance();
+            return aircraft.getFlightController();
+        }
+        return null;
+    }
+
+    public static synchronized DJISimulator getSimulator() {
+        if (isAircraftConnected()) {
+            return ((DJIAircraft) getProductInstance()).getFlightController().getSimulator();
+        }
+        return null;
+    }
     @Override
     public void onCreate() {
         super.onCreate();
@@ -102,9 +119,9 @@ public class PokemonSafariApplication extends Application {
         @Override
         public void onProductChanged(DJIBaseProduct oldProduct, DJIBaseProduct newProduct) {
 
-            djiBaseProduct = newProduct;
-            if (djiBaseProduct != null) {
-                djiBaseProduct.setDJIBaseProductListener(mDJIBaseProductListener);
+            baseProduct = newProduct;
+            if (baseProduct != null) {
+                baseProduct.setDJIBaseProductListener(mDJIBaseProductListener);
             }
 
             notifyStatusChange();

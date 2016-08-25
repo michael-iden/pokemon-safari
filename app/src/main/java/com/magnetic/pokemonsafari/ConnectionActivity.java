@@ -24,6 +24,7 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
     private TextView mTextConnectionStatus;
     private TextView mTextProduct;
     private Button mBtnOpen;
+    private Button simulator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +94,9 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
         mBtnOpen.setOnClickListener(this);
         mBtnOpen.setEnabled(false);
 
+        simulator = (Button)findViewById(R.id.btn_simulate);
+        simulator.setOnClickListener(this);
+        simulator.setEnabled(false);
     }
 
     protected BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -109,6 +113,7 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
         if (null != mProduct && mProduct.isConnected()) {
             Log.v(TAG, "refreshSDK: True");
             mBtnOpen.setEnabled(true);
+            simulator.setEnabled(true);
 
             String str = mProduct instanceof DJIAircraft ? "DJIAircraft" : "DJIHandHeld";
             mTextConnectionStatus.setText("Status: " + str + " connected");
@@ -122,6 +127,7 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
         } else {
             Log.v(TAG, "refreshSDK: False");
             mBtnOpen.setEnabled(false);
+            simulator.setEnabled(false);
 
             mTextProduct.setText(R.string.product_information);
             mTextConnectionStatus.setText(R.string.connection_loose);
@@ -135,6 +141,11 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
 
             case R.id.btn_open: {
                 Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
+            } case R.id.btn_simulate: {
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("simulation", true);
                 startActivity(intent);
                 break;
             }
