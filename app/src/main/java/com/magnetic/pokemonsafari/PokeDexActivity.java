@@ -1,5 +1,6 @@
 package com.magnetic.pokemonsafari;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -14,10 +15,9 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.List;
 
 public class PokeDexActivity extends AppCompatActivity {
-
-    private PokemonDatabaseHelper pokemonDatabaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,22 +26,24 @@ public class PokeDexActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        GridView gridview = (GridView) findViewById(R.id.gridview);
         try {
-            pokemonDatabaseHelper = new PokemonDatabaseHelper(this);
-            pokemonDatabaseHelper.getAllPokemon();
+            gridview.setAdapter(new ImageAdapter(this));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
-        GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new ImageAdapter(this));
-
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Toast.makeText(PokeDexActivity.this, "" + position,
-                        Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(getApplicationContext(), PokeDetailsActivity.class);
+//        EditText editText = (EditText) findViewById(R.id.edit_message);
+//        String message = editText.getText().toString();
+//        intent.putExtra(EXTRA_MESSAGE, message);
+                startActivity(intent);
+//                Toast.makeText(PokeDexActivity.this, "" + position,
+//                        Toast.LENGTH_SHORT).show();
             }
         });
 
