@@ -61,7 +61,7 @@
 
         <activity
             android:name=".ConnectionActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="landscape" />
@@ -78,6 +78,10 @@
         <activity
             android:name=".PokeDexActivity"
             android:label="@string/title_activity_poke_dex"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PokeDetailsActivity"
+            android:label="@string/title_activity_poke_details"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -20,7 +20,7 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        return mThumbIds.length;
+        return labels.length;
     }
 
     public Object getItem(int position) {
@@ -43,8 +43,8 @@ public class ImageAdapter extends BaseAdapter {
             gridViewAndroid = inflater.inflate(R.layout.pokedex_element, null);
             TextView textViewAndroid = (TextView) gridViewAndroid.findViewById(R.id.title);
             ImageView imageViewAndroid = (ImageView) gridViewAndroid.findViewById(R.id.image);
-            textViewAndroid.setText("CATTTT");
-            imageViewAndroid.setImageResource(mThumbIds[position]);
+            textViewAndroid.setText(labels[position]);
+            imageViewAndroid.setImageResource(R.drawable.questionmark);
         } else {
             gridViewAndroid = (View) convertView;
         }
@@ -53,17 +53,19 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     // references to our images
-    private Integer[] mThumbIds = {
-            R.drawable.sample_2, R.drawable.sample_3,
-            R.drawable.sample_4, R.drawable.sample_5,
-            R.drawable.sample_6, R.drawable.sample_7,
-            R.drawable.sample_0, R.drawable.sample_1,
-            R.drawable.sample_2, R.drawable.sample_3,
-            R.drawable.sample_4, R.drawable.sample_5,
-            R.drawable.sample_6, R.drawable.sample_7,
-            R.drawable.sample_0, R.drawable.sample_1,
-            R.drawable.sample_2, R.drawable.sample_3,
-            R.drawable.sample_4, R.drawable.sample_5,
-            R.drawable.sample_6, R.drawable.sample_7
+    private String[] labels = {
+            "No. 001 - ???",
+            "No. 002 - ???",
+            "No. 003 - ???",
+            "No. 004 - ???",
+            "No. 005 - ???",
+            "No. 006 - ???",
+            "No. 007 - ???",
+            "No. 008 - ???",
+            "No. 009 - ???",
+            "No. 010 - ???",
+            "No. 011 - ???",
+            "No. 012 - ???",
+            "No. 013 - ???"
     };
 }

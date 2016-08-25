@@ -1,5 +1,6 @@
 package com.magnetic.pokemonsafari;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -40,8 +41,14 @@ public class PokeDexActivity extends AppCompatActivity {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Toast.makeText(PokeDexActivity.this, "" + position,
-                        Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(getApplicationContext(), PokeDetailsActivity.class);
+//        EditText editText = (EditText) findViewById(R.id.edit_message);
+//        String message = editText.getText().toString();
+//        intent.putExtra(EXTRA_MESSAGE, message);
+                startActivity(intent);
+//                Toast.makeText(PokeDexActivity.this, "" + position,
+//                        Toast.LENGTH_SHORT).show();
             }
         });
 
