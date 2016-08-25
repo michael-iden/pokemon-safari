@@ -24,3 +24,4 @@
     <include layout="@layout/content_poke_details" />
 
 </android.support.design.widget.CoordinatorLayout>
+
