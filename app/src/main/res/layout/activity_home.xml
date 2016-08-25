@@ -45,7 +45,8 @@
         android:src="@drawable/white_pokeball"
         android:scaleType="fitCenter"
         android:paddingBottom="40dp"
-        android:paddingTop="10dp" />
+        android:paddingTop="10dp"
+        android:onClick="openPokeDex"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,5 +56,6 @@
         android:layout_alignBottom="@+id/imageButton2"
         android:layout_centerHorizontal="true"
         android:textStyle="bold"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        />
 </RelativeLayout>

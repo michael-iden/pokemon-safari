@@ -56,24 +56,29 @@
                 android:resource="@xml/accessory_filter" />
         </activity>
 
-        <service android:name="dji.sdk.SDKManager.DJIGlobalService"></service>
+        <service android:name="dji.sdk.SDKManager.DJIGlobalService" />
         <!-- DJI SDK -->
 
         <activity
             android:name=".ConnectionActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".MainActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name=".HomeActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".PokeDexActivity"
+            android:label="@string/title_activity_poke_dex"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
