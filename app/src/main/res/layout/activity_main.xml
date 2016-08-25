@@ -4,14 +4,21 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextureView
-        android:id="@+id/video_previewer_surface"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/linearLayout" />
-
+        android:layout_gravity="center"
+        android:layout_above="@+id/linearLayout">
+        <TextureView
+            android:id="@+id/video_previewer_surface"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <SurfaceView
+            android:id="@+id/overlay_surface"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

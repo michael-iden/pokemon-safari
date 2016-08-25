@@ -19,4 +19,10 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PokeDexActivity.class);
         startActivity(intent);
     }
+
+    /** Called when the user clicks the Send button */
+    public void openSafari(View view) {
+        Intent intent = new Intent(this, ConnectionActivity.class);
+        startActivity(intent);
+    }
 }
