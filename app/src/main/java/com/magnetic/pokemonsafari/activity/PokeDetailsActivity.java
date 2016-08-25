@@ -17,6 +17,10 @@ public class PokeDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_poke_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Bundle extras = getIntent().getExtras();
+        int number = extras.getInt("pokemonNumber");
+
     }
 
 }

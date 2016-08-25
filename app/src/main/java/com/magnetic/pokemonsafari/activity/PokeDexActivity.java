@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -33,13 +34,11 @@ public class PokeDexActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
 
+                Log.e("ASS", String.valueOf(position));
+
                 Intent intent = new Intent(getApplicationContext(), PokeDetailsActivity.class);
-//        EditText editText = (EditText) findViewById(R.id.edit_message);
-//        String message = editText.getText().toString();
-//        intent.putExtra(EXTRA_MESSAGE, message);
+                intent.putExtra("pokemonNumber", position);
                 startActivity(intent);
-//                Toast.makeText(PokeDexActivity.this, "" + position,
-//                        Toast.LENGTH_SHORT).show();
             }
         });
 
