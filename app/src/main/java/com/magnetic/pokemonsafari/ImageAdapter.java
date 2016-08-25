@@ -2,14 +2,14 @@ package com.magnetic.pokemonsafari;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,11 +56,13 @@ public class ImageAdapter extends BaseAdapter {
             gridViewAndroid = (View) convertView;
         }
 
-        TextView textViewAndroid = (TextView) gridViewAndroid.findViewById(R.id.title);
+        TextView nameTextView = (TextView) gridViewAndroid.findViewById(R.id.name);
+        TextView numberTextView = (TextView) gridViewAndroid.findViewById(R.id.number);
         ImageView imageViewAndroid = (ImageView) gridViewAndroid.findViewById(R.id.image);
 
         Pokemon pokemon = pokemonList.get(position);
-        textViewAndroid.setText(pokemon.getNumber());
+        nameTextView.setText(WordUtils.capitalize(pokemon.getName()));
+        numberTextView.setText(pokemon.getNumber());
 
         try {
             InputStream ims = mContext.getAssets().open(pokemon.getImageFile());
