@@ -45,6 +45,11 @@ public class Pokemon {
         return cryFile;
     }
 
+    public Drawable getImageDrawable(Context context) throws IOException {
+        InputStream ims = context.getAssets().open(imageFile);
+        return Drawable.createFromStream(ims, null);
+    }
+
     @Override
     public String toString() {
         return "Pokemon{" +

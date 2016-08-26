@@ -1,6 +1,8 @@
 package com.magnetic.pokemonsafari.activity;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -99,6 +101,8 @@ class ImageAdapter2 extends BaseAdapter {
 
         if (convertView == null) {
             contentDetailsView = new ImageView(context);
+//            contentDetailsView.setLayoutParams(new ViewGroup.LayoutParams(200,
+//                    ViewGroup.LayoutParams.MATCH_PARENT));
 
             switch (position) {
                 default:
@@ -106,7 +110,9 @@ class ImageAdapter2 extends BaseAdapter {
                     try {
                         ims = context.getAssets().open(pokemon.getImageFile());
                         Drawable d = Drawable.createFromStream(ims, null);
-                        contentDetailsView.setImageDrawable(d);
+                        Drawable d2 = resize(d);
+                        contentDetailsView.setImageDrawable(d2);
+//                        contentDetailsView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -117,6 +123,12 @@ class ImageAdapter2 extends BaseAdapter {
         }
 
         return contentDetailsView;
+    }
+
+    private Drawable resize(Drawable image) {
+        Bitmap b = ((BitmapDrawable)image).getBitmap();
+        Bitmap bitmapResized = Bitmap.createScaledBitmap(b, 1000, 1000, false);
+        return new BitmapDrawable(context.getResources(), bitmapResized);
     }
 }
 
