@@ -23,6 +23,7 @@ import java.io.InputStream;
  */
 public class Pokemon {
     private static final MediaPlayer.OnCompletionListener CRY_COMPLETED_LISTENER = (mediaPlayer) -> {
+        Log.d(Pokemon.class.getName(), "STOPPING PLAYBACK");
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
@@ -58,7 +59,15 @@ public class Pokemon {
     }
 
     public String getCryFile() {
-        return "pokemon/cries/" + cryFile + ".wav";
+        if (!cryFile.matches("^pokemon/cries.*$")) {
+            cryFile = "pokemon/cries/" + cryFile;
+        }
+
+        if (!cryFile.matches("^.*\\.wav$")) {
+            cryFile += ".wav";
+        }
+
+        return cryFile;
     }
 
     public Drawable getImageDrawable(Context context) throws IOException {
@@ -79,11 +88,17 @@ public class Pokemon {
     public void cry(Context context) {
         AssetManager assetManager = context.getAssets();
         Log.d(getClass().getName(), "Loading pokemon:\n" + toString());
-        try (AssetFileDescriptor f = assetManager.openFd(getCryFile())) {
+        try {
+            AssetFileDescriptor f = assetManager.openFd(getCryFile());
             MediaPlayer mediaPlayer = new MediaPlayer();
             mediaPlayer.setDataSource(f.getFileDescriptor(), f.getStartOffset(), f.getLength());
-            mediaPlayer.setOnCompletionListener(CRY_COMPLETED_LISTENER);
-            mediaPlayer.start();
+            mediaPlayer.setOnPreparedListener((mediaPlayer1 -> {
+                Log.d(getClass().getName(), "STARTING PLAYBACK");
+                mediaPlayer.start();
+                mediaPlayer.setOnCompletionListener(CRY_COMPLETED_LISTENER);
+            }));
+            mediaPlayer.prepareAsync();
+
         } catch (IOException e) {
             throw new RuntimeException("failed to load pokecry", e);
         }

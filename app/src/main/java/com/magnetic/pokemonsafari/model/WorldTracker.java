@@ -1,10 +1,13 @@
 package com.magnetic.pokemonsafari.model;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.magnetic.pokemonsafari.PokemonSafariApplication;
+import com.magnetic.pokemonsafari.activity.FlightActivity;
 
 import org.apache.commons.lang3.RandomUtils;
 
@@ -12,18 +15,22 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import dji.sdk.FlightController.DJICompass;
 import dji.sdk.FlightController.DJIFlightControllerDataType;
 import dji.sdk.FlightController.DJIFlightControllerDelegate;
+import dji.sdk.Products.DJIHandHeld;
+import dji.sdk.RemoteController.DJIRemoteController;
 
 /**
  * Created by joey.bickerstaff on 8/25/16.
  */
-public class WorldTracker implements DJIFlightControllerDelegate.FlightControllerUpdateSystemStateCallback {
+public class WorldTracker implements DJIFlightControllerDelegate.FlightControllerUpdateSystemStateCallback, DJIRemoteController.RCHardwareStateUpdateCallback {
     public static final double MIN_HEADING = -180.0;
     public static final double MAX_HEADING = 180.0;
     public static final double FOV = 94.0;
+    public static final int MAX_SPAWNED = 1;
 
     private final Object mutex = new Object();
 
@@ -32,8 +39,10 @@ public class WorldTracker implements DJIFlightControllerDelegate.FlightControlle
     private List<Pokemon> allPokemon;
     private double aircraftHeading = 0.0;
     private Set<SpawnedPokemon> spawnedPokemon = new HashSet<>();
-    private double previousHeading;
     private DJIFlightControllerDataType.DJILocationCoordinate3D aircraftLocation;
+    private boolean catchButtonDown = false;
+    private int canvasHeight;
+    private int canvasWidth;
 
     private boolean dirty = true;
 
@@ -42,6 +51,7 @@ public class WorldTracker implements DJIFlightControllerDelegate.FlightControlle
         compass = PokemonSafariApplication.getCompass();
         allPokemon = pokemonDatabaseHelper.getAllPokemon();
         PokemonSafariApplication.getFlightController().setUpdateSystemStateCallback(this);
+        PokemonSafariApplication.getRemoteController().setHardwareStateUpdateCallback(this);
     }
 
     public static void validateHeading(double newHeading) {
@@ -60,6 +70,7 @@ public class WorldTracker implements DJIFlightControllerDelegate.FlightControlle
         synchronized (mutex) {
             Pokemon randomPokemon = getRandomPokemon();
             SpawnedPokemon pokemon = new SpawnedPokemon(randomPokemon, aircraftHeading, context.getAssets());
+            pokemon.cry(context);
             spawnedPokemon.add(pokemon);
         }
     }
@@ -112,6 +123,12 @@ public class WorldTracker implements DJIFlightControllerDelegate.FlightControlle
                 Log.d(getClass().getName(), "NEW POSITION: " + newAircraftLocation);
                 aircraftHeading = newAircraftHeading;
                 aircraftLocation = newAircraftLocation;
+
+                if (RandomUtils.nextInt(0, 100) == 0 && spawnedPokemon.size() < MAX_SPAWNED) {
+                    Log.d(getClass().getName(), "SPAWNING NEW POKEMON AT HEADING " + aircraftHeading);
+                    spawnNewPokemon();
+                }
+
                 setDirty(true);
             }
         }
@@ -119,5 +136,33 @@ public class WorldTracker implements DJIFlightControllerDelegate.FlightControlle
 
     private void setDirty(boolean newDirty) {
         dirty = newDirty;
+    }
+
+    @Override
+    public void onHardwareStateUpdate(DJIRemoteController djiRemoteController, DJIRemoteController.DJIRCHardwareState djircHardwareState) {
+        if (catchButtonDown && djircHardwareState.customButton1.buttonDown) {
+            catchAllPokemonInFov();
+        }
+    }
+
+    public void catchAllPokemonInFov() {
+        synchronized (mutex) {
+            Set<SpawnedPokemon> temp = new TreeSet<>(spawnedPokemon);
+            for (SpawnedPokemon pokemon: temp) {
+                if (pokemon.isInFov(getFovLeftBound(), getFovRightBound())) {
+                    pokemon.cry(context);
+                    showToast("You caught a " + pokemon.getName() + "!!!!");
+                    spawnedPokemon.remove(pokemon);
+                }
+            }
+        }
+    }
+
+    public void showToast(final String msg) {
+        ((Activity)context).runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(FlightActivity.getInstance(), msg, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

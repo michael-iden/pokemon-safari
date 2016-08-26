@@ -13,6 +13,7 @@ import dji.sdk.FlightController.DJIFlightController;
 import dji.sdk.FlightController.DJISimulator;
 import dji.sdk.Products.DJIAircraft;
 import dji.sdk.Products.DJIHandHeld;
+import dji.sdk.RemoteController.DJIRemoteController;
 import dji.sdk.SDKManager.DJISDKManager;
 import dji.sdk.base.DJIBaseComponent;
 import dji.sdk.base.DJIBaseComponent.DJIComponentListener;
@@ -38,6 +39,10 @@ public class PokemonSafariApplication extends Application {
             baseProduct = DJISDKManager.getInstance().getDJIProduct();
         }
         return baseProduct;
+    }
+
+    public static synchronized DJIRemoteController getRemoteController() {
+        return ((DJIAircraft)baseProduct).getRemoteController();
     }
 
     public static boolean isAircraftConnected() {

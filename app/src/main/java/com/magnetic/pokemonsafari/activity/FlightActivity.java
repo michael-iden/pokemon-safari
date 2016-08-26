@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -41,8 +42,9 @@ import dji.sdk.base.DJIError;
 import dji.sdk.Camera.DJICameraSettingsDef.CameraMode;
 import dji.sdk.Camera.DJICameraSettingsDef.CameraShootPhotoMode;
 
-public class FlightActivity extends Activity implements SurfaceTextureListener, OnClickListener {
+public class FlightActivity extends Activity implements SurfaceTextureListener {
 
+    private static Activity INSTANCE;
     private static final String TAG = FlightActivity.class.getName();
     protected DJICamera.CameraReceivedVideoDataCallback mReceivedVideoDataCallBack = null;
 
@@ -54,14 +56,17 @@ public class FlightActivity extends Activity implements SurfaceTextureListener, 
     protected SurfaceView overlaySurface = null;
     protected SurfaceHolder overlayHolder = null;
 
-    private Button captureButton;
-
     private Bitmap reticleBitmap;
     private String simulatorOutput = "";
 
     private WorldTracker worldTracker;
 
     public FlightActivity() {
+        INSTANCE = this;
+    }
+
+    public static Activity getInstance() {
+        return INSTANCE;
     }
 
     @Override
@@ -73,8 +78,7 @@ public class FlightActivity extends Activity implements SurfaceTextureListener, 
         PokemonSafariApplication.getFlightController().setVirtualStickAdvancedModeEnabled(true);
 
         try {
-            worldTracker = new WorldTracker(getApplicationContext(), new PokemonDatabaseHelper(getApplicationContext()));
-            worldTracker.spawnNewPokemon();
+            worldTracker = new WorldTracker(this, new PokemonDatabaseHelper(getApplicationContext()));
         } catch (IOException e) {
             throw new RuntimeException("failed to initialize world tracker", e);
         }
@@ -145,7 +149,6 @@ public class FlightActivity extends Activity implements SurfaceTextureListener, 
         // init videoSurface
         videoSurface = (TextureView) findViewById(R.id.video_previewer_surface);
         overlaySurface = (SurfaceView) findViewById(R.id.overlay_surface);
-        captureButton = (Button) findViewById(R.id.btn_capture);
 
         if (null != videoSurface) {
             videoSurface.setSurfaceTextureListener(this);
@@ -173,8 +176,6 @@ public class FlightActivity extends Activity implements SurfaceTextureListener, 
                                                    }
             );
         }
-
-        captureButton.setOnClickListener(this);
     }
 
     private void initPreviewer() {
@@ -271,20 +272,6 @@ public class FlightActivity extends Activity implements SurfaceTextureListener, 
                 Toast.makeText(FlightActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        switch (v.getId()) {
-            case R.id.btn_capture: {
-                captureAction();
-                break;
-            }
-
-            default:
-                break;
-        }
     }
 
     // Method for taking photo
