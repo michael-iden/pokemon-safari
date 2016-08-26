@@ -34,16 +34,11 @@ public class PokeDexActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
 
-                Log.e("ASS", String.valueOf(position));
-
                 Intent intent = new Intent(getApplicationContext(), PokeDetailsActivity.class);
-                intent.putExtra("pokemonNumber", position);
+                intent.putExtra("selectedIndex", position);
                 startActivity(intent);
             }
         });
-
-
-
     }
 
 }

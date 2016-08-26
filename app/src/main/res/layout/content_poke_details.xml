@@ -13,90 +13,94 @@
         android:id="@+id/gallery"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:layout_margin="25dp"
         />
 
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_below="@+id/gallery"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_marginTop="25dp"-->
-        <!--android:background="@color/colorPrimary">-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/gallery"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorWhite">
 
-        <!--<TableLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentTop="true"-->
-            <!--android:layout_alignParentStart="true">-->
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
 
-            <!--<TableRow-->
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:text="Score:"
+                    android:id="@+id/textView6"
+                    android:layout_column="8"
+                    android:textSize="32dp"
+                    android:textColor="@color/background_material_dark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left" />
+
+                <TextView
+                    android:text="9001"
+                    android:id="@+id/textView8"
+                    android:layout_column="9"
+                    android:textSize="32dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:text="Taken Date:"
+                    android:id="@+id/textView5"
+                    android:layout_column="8"
+                    android:textSize="32dp"
+                    android:textColor="@color/background_material_dark"
+                    android:gravity="left" />
+
+                <TextView
+                    android:text="12/08/2016"
+                    android:id="@+id/textView9"
+                    android:layout_column="9"
+                    android:textSize="32dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:text="Location:"
+                    android:id="@+id/textView7"
+                    android:layout_column="8"
+                    android:textSize="32dp"
+                    android:textColor="@color/background_material_dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+            <!--<fragment-->
+
+                <!--android:layout_height="200dp"-->
                 <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent" >-->
+                <!--android:name="com.google.android.gms.maps.MapFragment" />-->
 
-                <!--<TextView-->
-                    <!--android:text="Score:"-->
-                    <!--android:id="@+id/textView6"-->
-                    <!--android:layout_column="8"-->
-                    <!--android:textSize="32dp"-->
-                    <!--android:textColor="@color/colorWhite"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content" />-->
+        </TableLayout>
 
-                <!--<TextView-->
-                    <!--android:text="9001"-->
-                    <!--android:id="@+id/textView8"-->
-                    <!--android:layout_column="9"-->
-                    <!--android:textSize="32dp"-->
-                    <!--android:textColor="@color/colorWhite"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content" />-->
-
-            <!--</TableRow>-->
-
-            <!--<TableRow-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent">-->
-
-                <!--<TextView-->
-                    <!--android:text="Taken Date:"-->
-                    <!--android:id="@+id/textView5"-->
-                    <!--android:layout_column="8"-->
-                    <!--android:textSize="32dp"-->
-                    <!--android:textColor="@color/colorWhite" />-->
-
-                <!--<TextView-->
-                    <!--android:text="12/08/2016"-->
-                    <!--android:id="@+id/textView9"-->
-                    <!--android:layout_column="9"-->
-                    <!--android:textSize="32dp"-->
-                    <!--android:textColor="@color/colorWhite"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content" />-->
-
-            <!--</TableRow>-->
-
-            <!--<TableRow-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent" >-->
-
-                <!--<TextView-->
-                    <!--android:text="Location:"-->
-                    <!--android:id="@+id/textView7"-->
-                    <!--android:layout_column="8"-->
-                    <!--android:textSize="32dp"-->
-                    <!--android:textColor="@color/colorWhite"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content" />-->
-            <!--</TableRow>-->
-
-            <!--&lt;!&ndash;<fragment&ndash;&gt;-->
-
-                <!--&lt;!&ndash;android:layout_height="200dp"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:name="com.google.android.gms.maps.MapFragment" />&ndash;&gt;-->
-
-        <!--</TableLayout>-->
-
-    <!--</RelativeLayout>-->
+    </RelativeLayout>
 
 </RelativeLayout>
