@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import dji.sdk.Camera.DJICamera;
+import dji.sdk.FlightController.DJICompass;
 import dji.sdk.FlightController.DJIFlightController;
 import dji.sdk.FlightController.DJISimulator;
 import dji.sdk.Products.DJIAircraft;
@@ -155,6 +156,13 @@ public class PokemonSafariApplication extends Application {
         }
 
     };
+
+    public static DJICompass getCompass() {
+        if (getFlightController() != null) {
+            return getFlightController().getCompass();
+        }
+        return null;
+    }
 
     private void notifyStatusChange() {
         mainLooper.removeCallbacks(updateRunnable);

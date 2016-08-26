@@ -9,8 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.magnetic.pokemonsafari.model.Pokemon;
-import com.magnetic.pokemonsafari.model.PokemonDatabaseHelper;
 import com.magnetic.pokemonsafari.R;
 
 import java.io.IOException;
@@ -21,13 +19,13 @@ import java.util.List;
  * Created by michael.iden on 8/24/16.
  */
 public class ImageAdapter extends BaseAdapter {
-    private Context mContext;
+    private Context context;
     private List<Pokemon> pokemonList;
 
     public ImageAdapter(Context c) throws IOException {
-        mContext = c;
+        context = c;
 
-        PokemonDatabaseHelper pokemonDatabaseHelper = new PokemonDatabaseHelper(mContext);
+        PokemonDatabaseHelper pokemonDatabaseHelper = new PokemonDatabaseHelper(context);
         pokemonList = pokemonDatabaseHelper.getAllPokemon();
 
     }
@@ -47,7 +45,7 @@ public class ImageAdapter extends BaseAdapter {
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
         View gridViewAndroid;
-        LayoutInflater inflater = (LayoutInflater) mContext
+        LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if (convertView == null) {
@@ -65,7 +63,7 @@ public class ImageAdapter extends BaseAdapter {
         textViewAndroid.setText(pokemon.getNumber());
 
         try {
-            InputStream ims = mContext.getAssets().open(pokemon.getImageFile());
+            InputStream ims = context.getAssets().open(pokemon.getImageFile());
             Drawable d = Drawable.createFromStream(ims, null);
             imageViewAndroid.setImageDrawable(d);
         } catch (IOException e) {

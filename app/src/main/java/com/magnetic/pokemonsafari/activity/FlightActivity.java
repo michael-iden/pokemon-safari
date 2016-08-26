@@ -24,6 +24,10 @@ import android.widget.Toast;
 
 import com.magnetic.pokemonsafari.PokemonSafariApplication;
 import com.magnetic.pokemonsafari.R;
+import com.magnetic.pokemonsafari.model.PokemonDatabaseHelper;
+import com.magnetic.pokemonsafari.model.WorldTracker;
+
+import java.io.IOException;
 
 import dji.sdk.Camera.DJICamera;
 import dji.sdk.Camera.DJICamera.CameraReceivedVideoDataCallback;
@@ -52,8 +56,10 @@ public class FlightActivity extends Activity implements SurfaceTextureListener, 
 
     private Button captureButton;
 
-    Bitmap reticleBitmap;
-    String simulatorOutput = "";
+    private Bitmap reticleBitmap;
+    private String simulatorOutput = "";
+
+    private WorldTracker worldTracker;
 
     public FlightActivity() {
     }
@@ -65,6 +71,13 @@ public class FlightActivity extends Activity implements SurfaceTextureListener, 
         setContentView(R.layout.activity_main);
 
         PokemonSafariApplication.getFlightController().setVirtualStickAdvancedModeEnabled(true);
+
+        try {
+            worldTracker = new WorldTracker(getApplicationContext(), new PokemonDatabaseHelper(getApplicationContext()));
+            worldTracker.spawnNewPokemon();
+        } catch (IOException e) {
+            throw new RuntimeException("failed to initialize world tracker", e);
+        }
 
         simulation = getIntent().getBooleanExtra("simulation", false);
         Log.i(TAG, String.format("SIMULATION MODE?  %b", simulation));
@@ -131,7 +144,7 @@ public class FlightActivity extends Activity implements SurfaceTextureListener, 
     private void initUI() {
         // init videoSurface
         videoSurface = (TextureView) findViewById(R.id.video_previewer_surface);
-        overlaySurface = (SurfaceView)findViewById(R.id.overlay_surface);
+        overlaySurface = (SurfaceView) findViewById(R.id.overlay_surface);
         captureButton = (Button) findViewById(R.id.btn_capture);
 
         if (null != videoSurface) {
@@ -155,7 +168,7 @@ public class FlightActivity extends Activity implements SurfaceTextureListener, 
 
                                                        @Override
                                                        public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-                                                            overlayHolder = null;
+                                                           overlayHolder = null;
                                                        }
                                                    }
             );
@@ -222,7 +235,9 @@ public class FlightActivity extends Activity implements SurfaceTextureListener, 
                 redrawOverlay();
 
             });
-            simulator.startSimulator(initializationData, error -> { Log.i(TAG, "SIMULATOR FAILED: " + error); });
+            simulator.startSimulator(initializationData, error -> {
+                Log.i(TAG, "SIMULATOR FAILED: " + error);
+            });
         }
     }
 
@@ -312,6 +327,8 @@ public class FlightActivity extends Activity implements SurfaceTextureListener, 
         } else if (fc.canTakeOff()) {
             isInTheAir = "Ready for takeoff";
         }
+
+        worldTracker.renderSpawnedPokemon(canvas);
 
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
