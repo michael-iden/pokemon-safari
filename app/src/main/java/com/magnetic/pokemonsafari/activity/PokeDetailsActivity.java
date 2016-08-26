@@ -29,6 +29,7 @@ import com.magnetic.pokemonsafari.model.ImageStats;
 import com.magnetic.pokemonsafari.model.Pokemon;
 import com.magnetic.pokemonsafari.model.PokemonDatabaseHelper;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -47,9 +48,9 @@ public class PokeDetailsActivity extends AppCompatActivity {
 
     private Pokemon pokemon;
     private List<ImageStats> imageStats = Arrays.asList(
-            new ImageStats(9001, new Date(1471697946000L)),
-            new ImageStats(1000, new Date(1472216346000L)),
-            new ImageStats(666, new Date(1471957146000L)));
+            new ImageStats(9001 * RandomUtils.nextInt(1, 4), new Date(1471697946000L)),
+            new ImageStats(1000 * RandomUtils.nextInt(1, 4), new Date(1472216346000L)),
+            new ImageStats(666 * RandomUtils.nextInt(1, 4), new Date(1471957146000L)));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
