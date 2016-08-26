@@ -313,10 +313,15 @@ public class FlightActivity extends Activity implements SurfaceTextureListener, 
 
     private void redrawOverlay() {
         if (overlayHolder == null) {
+            Log.w(TAG, "skipping rendering due to null overlay holder");
             return;
         }
 
         Canvas canvas = overlayHolder.lockCanvas();
+        if (canvas == null) {
+            Log.w(TAG, "skipping rendering due to null canvas");
+            return;
+        }
         canvas.drawColor(Color.BLACK, PorterDuff.Mode.CLEAR);
 
         DJIFlightController fc = PokemonSafariApplication.getFlightController();

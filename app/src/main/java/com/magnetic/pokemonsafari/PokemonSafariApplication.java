@@ -27,9 +27,7 @@ public class PokemonSafariApplication extends Application {
     public static final String FLAG_CONNECTION_CHANGE = "fpv_tutorial_connection_change";
 
     private static DJIBaseProduct baseProduct;
-    private static DJIFlightController flightController;
-
-    private Handler mainLooper;
+    private Handler connectionNotificationLooper;
 
     /**
      * This function is used to get the instance of DJIBaseProduct.
@@ -74,44 +72,26 @@ public class PokemonSafariApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        mainLooper = new Handler(Looper.getMainLooper());
+        connectionNotificationLooper = new Handler(Looper.getMainLooper());
         //This is used to start SDK services and initiate SDK.
-        DJISDKManager.getInstance().initSDKManager(this, mDJISDKManagerCallback);
+        DJISDKManager.getInstance().initSDKManager(this, sdkRegistrationCallback);
     }
 
     /**
      * When starting SDK services, an instance of interface DJISDKManager.DJISDKManagerCallback will be used to listen to
      * the SDK Registration result and the product changing.
      */
-    private DJISDKManager.DJISDKManagerCallback mDJISDKManagerCallback = new DJISDKManager.DJISDKManagerCallback() {
+    private DJISDKManager.DJISDKManagerCallback sdkRegistrationCallback = new DJISDKManager.DJISDKManagerCallback() {
 
         //Listens to the SDK registration result
         @Override
         public void onGetRegisteredResult(DJIError error) {
 
             if (error == DJISDKError.REGISTRATION_SUCCESS) {
-
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), "Register Success", Toast.LENGTH_LONG).show();
-                    }
-                });
-
                 DJISDKManager.getInstance().startConnectionToProduct();
-
             } else {
-
                 Handler handler = new Handler(Looper.getMainLooper());
-                handler.post(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), "Register sdk fails, check network is available", Toast.LENGTH_LONG).show();
-                    }
-                });
-
+                handler.post(() -> Toast.makeText(getApplicationContext(), "Register sdk fails, check network is available", Toast.LENGTH_LONG).show());
             }
             Log.e("TAG", error.toString());
         }
@@ -130,32 +110,22 @@ public class PokemonSafariApplication extends Application {
     };
 
     private DJIBaseProductListener mDJIBaseProductListener = new DJIBaseProductListener() {
-
         @Override
         public void onComponentChange(DJIComponentKey key, DJIBaseComponent oldComponent, DJIBaseComponent newComponent) {
-
             if (newComponent != null) {
-                newComponent.setDJIComponentListener(mDJIComponentListener);
+                newComponent.setDJIComponentListener(componentConnectionListener);
             }
             notifyStatusChange();
         }
 
         @Override
         public void onProductConnectivityChanged(boolean isConnected) {
-
             notifyStatusChange();
         }
 
     };
 
-    private DJIComponentListener mDJIComponentListener = new DJIComponentListener() {
-
-        @Override
-        public void onComponentConnectivityChanged(boolean isConnected) {
-            notifyStatusChange();
-        }
-
-    };
+    private DJIComponentListener componentConnectionListener = isConnected -> notifyStatusChange();
 
     public static DJICompass getCompass() {
         if (getFlightController() != null) {
@@ -165,17 +135,13 @@ public class PokemonSafariApplication extends Application {
     }
 
     private void notifyStatusChange() {
-        mainLooper.removeCallbacks(updateRunnable);
-        mainLooper.postDelayed(updateRunnable, 500);
+        connectionNotificationLooper.removeCallbacks(updateRunnable);
+        connectionNotificationLooper.postDelayed(updateRunnable, 500);
     }
 
-    private Runnable updateRunnable = new Runnable() {
-
-        @Override
-        public void run() {
-            Intent intent = new Intent(FLAG_CONNECTION_CHANGE);
-            sendBroadcast(intent);
-        }
+    private Runnable updateRunnable = () -> {
+        Intent intent = new Intent(FLAG_CONNECTION_CHANGE);
+        sendBroadcast(intent);
     };
 
 }

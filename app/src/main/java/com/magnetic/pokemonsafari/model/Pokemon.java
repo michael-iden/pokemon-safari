@@ -1,10 +1,20 @@
 package com.magnetic.pokemonsafari.model;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.util.Log;
 
+import com.magnetic.pokemonsafari.activity.PokeDetailsActivity;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -12,6 +22,12 @@ import java.io.InputStream;
  *
  */
 public class Pokemon {
+    private static final MediaPlayer.OnCompletionListener CRY_COMPLETED_LISTENER = (mediaPlayer) -> {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
+    };
 
     private String number;
     private String name;
@@ -42,7 +58,7 @@ public class Pokemon {
     }
 
     public String getCryFile() {
-        return cryFile;
+        return "pokemon/cries/" + cryFile + ".wav";
     }
 
     public Drawable getImageDrawable(Context context) throws IOException {
@@ -53,17 +69,24 @@ public class Pokemon {
     @Override
     public String toString() {
         return "Pokemon{" +
-                "cryFile='" + cryFile + '\'' +
-                ", imageFile='" + imageFile + '\'' +
-                ", name='" + name + '\'' +
-                ", number='" + number + '\'' +
+                "cryFile='" + getCryFile() + '\'' +
+                ", imageFile='" + getImageFile() + '\'' +
+                ", name='" + getName() + '\'' +
+                ", number='" + getNumber() + '\'' +
                 '}';
     }
 
-    public void draw(Context context, Canvas canvas) throws IOException {
-        Log.d(getClass().getName(), "RENDERING TO " + canvas);
-        Drawable drawable = getImageDrawable(context);
-        drawable.setBounds(100, 100, 500, 500);
-        drawable.draw(canvas);
+    public void cry(Context context) {
+        AssetManager assetManager = context.getAssets();
+        Log.d(getClass().getName(), "Loading pokemon:\n" + toString());
+        try (AssetFileDescriptor f = assetManager.openFd(getCryFile())) {
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer.setDataSource(f.getFileDescriptor(), f.getStartOffset(), f.getLength());
+            mediaPlayer.setOnCompletionListener(CRY_COMPLETED_LISTENER);
+            mediaPlayer.start();
+        } catch (IOException e) {
+            throw new RuntimeException("failed to load pokecry", e);
+        }
+
     }
 }

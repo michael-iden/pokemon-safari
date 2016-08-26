@@ -59,7 +59,7 @@ public class WorldTracker implements DJIFlightControllerDelegate.FlightControlle
         Log.d(getClass().getName(), "SPAWNING NEW POKEMON");
         synchronized (mutex) {
             Pokemon randomPokemon = getRandomPokemon();
-            SpawnedPokemon pokemon = new SpawnedPokemon(randomPokemon, aircraftHeading);
+            SpawnedPokemon pokemon = new SpawnedPokemon(randomPokemon, aircraftHeading, context.getAssets());
             spawnedPokemon.add(pokemon);
         }
     }

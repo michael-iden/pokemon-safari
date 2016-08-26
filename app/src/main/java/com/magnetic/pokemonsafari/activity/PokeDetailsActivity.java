@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,6 +27,7 @@ import com.magnetic.pokemonsafari.model.PokemonDatabaseHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -67,8 +69,7 @@ public class PokeDetailsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.a001);
-        mediaPlayer.start();
+        pokemon.cry(this);
 
         EcoGallery ecoGallery = (EcoGallery) findViewById(R.id.gallery);
         ecoGallery.setAdapter(new ImageAdapter2(this, pokemon));
