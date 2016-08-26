@@ -2,10 +2,9 @@ package com.magnetic.pokemonsafari.activity;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -13,9 +12,11 @@ import android.widget.ImageView;
 
 import us.feras.ecogallery.EcoGallery;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.magnetic.pokemonsafari.R;
 
-public class PokeDetailsActivity extends AppCompatActivity {
+public class PokeDetailsActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,10 @@ public class PokeDetailsActivity extends AppCompatActivity {
         ecoGallery.setAdapter(new ImageAdapter2(this));
     }
 
+//    @Override
+//    public void onMapReady(GoogleMap googleMap) {
+//
+//    }
 }
 
 class ImageAdapter2 extends BaseAdapter {
@@ -54,19 +59,26 @@ class ImageAdapter2 extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         // Not using convertView for simplicity. You should probably use it in real application to get better performance.
-        ImageView imageView = new ImageView(context);
+        ImageView contentDetailsView;
+
+        if (convertView == null) {
+            contentDetailsView = new ImageView(context);
+        } else {
+            contentDetailsView = (ImageView) convertView;
+        }
+
         int resId;
         switch (position) {
-            case 0: resId = R.drawable.one;
+            case 0: resId = R.drawable.drone_img;
                 break;
-            case 1: resId = R.drawable.two;
+            case 1: resId = R.drawable.drone_img2;
                 break;
-            case 2: resId = R.drawable.three;
+            case 2: resId = R.drawable.big_house;
                 break;
-            default: resId = R.drawable.one;
+            default: resId = R.drawable.drone_img;
         }
-        imageView.setImageResource(resId);
-        return imageView;
+        contentDetailsView.setImageResource(resId);
+        return contentDetailsView;
     }
 }
 
