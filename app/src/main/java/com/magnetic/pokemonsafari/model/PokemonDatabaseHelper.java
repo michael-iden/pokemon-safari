@@ -100,16 +100,27 @@ public class PokemonDatabaseHelper extends SQLiteOpenHelper {
 
         List<Pokemon> pokemonList = new ArrayList<>(151);
         while(pokemonDatabaseCursor.moveToNext()) {
-
-            String number = pokemonDatabaseCursor.getString(0);
-            String name = pokemonDatabaseCursor.getString(1);
-            String imageFile = pokemonDatabaseCursor.getString(2);
-            String cryFile = pokemonDatabaseCursor.getString(3);
-
-            pokemonList.add(new Pokemon(number, name, imageFile, cryFile));
+            pokemonList.add(getPokemonFromCursorEntry(pokemonDatabaseCursor));
         }
 
         return pokemonList;
+    }
+
+    public Pokemon getPokemon(String number) {
+        SQLiteDatabase pokemonDatabase = this.getReadableDatabase();
+        Cursor pokemonDatabaseCursor = pokemonDatabase.rawQuery("SELECT * FROM POKEMON WHERE NUMBER = ?", new String[]{number});
+        pokemonDatabaseCursor.moveToLast();
+
+        return getPokemonFromCursorEntry(pokemonDatabaseCursor);
+    }
+
+    private Pokemon getPokemonFromCursorEntry(Cursor cursor) {
+        String number = cursor.getString(0);
+        String name = cursor.getString(1);
+        String imageFile = cursor.getString(2);
+        String cryFile = cursor.getString(3);
+
+        return new Pokemon(number, name, imageFile, cryFile);
     }
 
     @Override

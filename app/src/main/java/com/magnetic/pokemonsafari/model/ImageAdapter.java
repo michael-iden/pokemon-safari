@@ -9,6 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.text.WordUtils;
+
+import com.magnetic.pokemonsafari.model.Pokemon;
+import com.magnetic.pokemonsafari.model.PokemonDatabaseHelper;
 import com.magnetic.pokemonsafari.R;
 
 import java.io.IOException;
@@ -56,11 +60,13 @@ public class ImageAdapter extends BaseAdapter {
             gridViewAndroid = (View) convertView;
         }
 
-        TextView textViewAndroid = (TextView) gridViewAndroid.findViewById(R.id.title);
+        TextView nameTextView = (TextView) gridViewAndroid.findViewById(R.id.name);
+        TextView numberTextView = (TextView) gridViewAndroid.findViewById(R.id.number);
         ImageView imageViewAndroid = (ImageView) gridViewAndroid.findViewById(R.id.image);
 
         Pokemon pokemon = pokemonList.get(position);
-        textViewAndroid.setText(pokemon.getNumber());
+        nameTextView.setText(WordUtils.capitalize(pokemon.getName()));
+        numberTextView.setText(pokemon.getNumber());
 
         try {
             InputStream ims = context.getAssets().open(pokemon.getImageFile());

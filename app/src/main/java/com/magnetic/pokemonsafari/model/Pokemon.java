@@ -17,7 +17,6 @@ public class Pokemon {
     private String name;
     private String imageFile;
     private String cryFile;
-    private Drawable drawable;
 
     public Pokemon(String number, String name, String imageFile, String cryFile) {
         this.number = number;
@@ -47,14 +46,8 @@ public class Pokemon {
     }
 
     public Drawable getImageDrawable(Context context) throws IOException {
-        if(drawable != null) {
-            return drawable;
-        }
-
         InputStream ims = context.getAssets().open(imageFile);
-        drawable = Drawable.createFromStream(ims, null);
-
-        return drawable;
+        return Drawable.createFromStream(ims, null);
     }
 
     @Override

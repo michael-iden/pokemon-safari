@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -34,17 +35,10 @@ public class PokeDexActivity extends AppCompatActivity {
                                     int position, long id) {
 
                 Intent intent = new Intent(getApplicationContext(), PokeDetailsActivity.class);
-//        EditText editText = (EditText) findViewById(R.id.edit_message);
-//        String message = editText.getText().toString();
-//        intent.putExtra(EXTRA_MESSAGE, message);
+                intent.putExtra("selectedIndex", position);
                 startActivity(intent);
-//                Toast.makeText(PokeDexActivity.this, "" + position,
-//                        Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
     }
 
 }
