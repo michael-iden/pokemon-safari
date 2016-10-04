@@ -1,5 +1,6 @@
 package com.magnetic.pokemonsafari.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,27 +14,43 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import us.feras.ecogallery.EcoGallery;
+import us.feras.ecogallery.EcoGalleryAdapterView;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.magnetic.pokemonsafari.R;
+import com.magnetic.pokemonsafari.model.ImageStats;
 import com.magnetic.pokemonsafari.model.Pokemon;
 import com.magnetic.pokemonsafari.model.PokemonDatabaseHelper;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class PokeDetailsActivity extends AppCompatActivity {
 
+    private static final SimpleDateFormat format1 = new SimpleDateFormat("MM/dd/yyyy");
+
     private Pokemon pokemon;
+    private List<ImageStats> imageStats = Arrays.asList(
+            new ImageStats(9001 * RandomUtils.nextInt(1, 4), new Date(1471697946000L)),
+            new ImageStats(1000 * RandomUtils.nextInt(1, 4), new Date(1472216346000L)),
+            new ImageStats(666 * RandomUtils.nextInt(1, 4), new Date(1471957146000L)));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +67,7 @@ public class PokeDetailsActivity extends AppCompatActivity {
 
     private Pokemon getSelectedPokemon() {
         Bundle extras = getIntent().getExtras();
-        int number = extras.getInt("selectedIndex")+1;
+        int number = extras.getInt("selectedIndex") + 1;
 
         String pokemonNumber = String.format("%03d", number);
 
@@ -73,6 +90,21 @@ public class PokeDetailsActivity extends AppCompatActivity {
 
         EcoGallery ecoGallery = (EcoGallery) findViewById(R.id.gallery);
         ecoGallery.setAdapter(new ImageAdapter2(this, pokemon));
+        ecoGallery.setOnItemSelectedListener(new EcoGalleryAdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(EcoGalleryAdapterView<?> parent, View view, int position, long id) {
+                TextView scoreTextView = (TextView) findViewById(R.id.score);
+                TextView dateTextView = (TextView) findViewById(R.id.date);
+                scoreTextView.setText(String.valueOf(imageStats.get(position).getScore()));
+                dateTextView.setText(format1.format(imageStats.get(position).getDate()));
+            }
+
+            @Override
+            public void onNothingSelected(EcoGalleryAdapterView<?> parent) {
+
+            }
+        });
     }
 }
 
@@ -102,8 +134,6 @@ class ImageAdapter2 extends BaseAdapter {
 
         if (convertView == null) {
             contentDetailsView = new ImageView(context);
-//            contentDetailsView.setLayoutParams(new ViewGroup.LayoutParams(200,
-//                    ViewGroup.LayoutParams.MATCH_PARENT));
 
             switch (position) {
                 default:
@@ -113,7 +143,6 @@ class ImageAdapter2 extends BaseAdapter {
                         Drawable d = Drawable.createFromStream(ims, null);
                         Drawable d2 = resize(d);
                         contentDetailsView.setImageDrawable(d2);
-//                        contentDetailsView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
                     } catch (IOException e) {
                         e.printStackTrace();

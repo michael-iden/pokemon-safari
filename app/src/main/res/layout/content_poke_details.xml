@@ -45,7 +45,7 @@
 
                 <TextView
                     android:text="9001"
-                    android:id="@+id/textView8"
+                    android:id="@+id/score"
                     android:layout_column="9"
                     android:textSize="32dp"
                     android:textColor="@color/colorPrimary"
@@ -69,7 +69,7 @@
 
                 <TextView
                     android:text="12/08/2016"
-                    android:id="@+id/textView9"
+                    android:id="@+id/date"
                     android:layout_column="9"
                     android:textSize="32dp"
                     android:textColor="@color/colorPrimary"
@@ -92,12 +92,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </TableRow>
-
-            <!--<fragment-->
-
-                <!--android:layout_height="200dp"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:name="com.google.android.gms.maps.MapFragment" />-->
 
         </TableLayout>
 

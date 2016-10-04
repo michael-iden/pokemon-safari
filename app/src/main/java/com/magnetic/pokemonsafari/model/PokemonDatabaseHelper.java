@@ -103,6 +103,9 @@ public class PokemonDatabaseHelper extends SQLiteOpenHelper {
             pokemonList.add(getPokemonFromCursorEntry(pokemonDatabaseCursor));
         }
 
+        pokemonDatabaseCursor.close();
+        pokemonDatabase.close();
+
         return pokemonList;
     }
 
@@ -111,7 +114,12 @@ public class PokemonDatabaseHelper extends SQLiteOpenHelper {
         Cursor pokemonDatabaseCursor = pokemonDatabase.rawQuery("SELECT * FROM POKEMON WHERE NUMBER = ?", new String[]{number});
         pokemonDatabaseCursor.moveToLast();
 
-        return getPokemonFromCursorEntry(pokemonDatabaseCursor);
+        Pokemon pokemon = getPokemonFromCursorEntry(pokemonDatabaseCursor);
+
+        pokemonDatabaseCursor.close();
+        pokemonDatabase.close();
+
+        return pokemon;
     }
 
     private Pokemon getPokemonFromCursorEntry(Cursor cursor) {
